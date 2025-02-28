@@ -33,9 +33,13 @@
                         </button>
                     </x-slot>
 
-                    <x-slot name="content">
+                    <x-slot name="content" style="white-space: nowrap;">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Профиль') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('admin-panel.edit')" style="white-space: nowrap;">
+                            {{ __('Панель администратора') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
