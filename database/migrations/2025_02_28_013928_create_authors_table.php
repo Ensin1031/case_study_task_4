@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('author_name')->comment('Автор');
+            $table->string('author_photo')->nullable()->comment('Фото автора');
+            $table->text('about_author')->default('')->comment('Об авторе');
+            $table->timestamps();
         });
     }
 

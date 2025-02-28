@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('status', [1, 2, 3])->default(1)->comment('Статус');  // 1 - Черновик, 2 - Опубликовано, 3 - Удалено
             $table->float('price')->default(0.00)->comment('Цена');
             $table->integer('published_year')->default(0)->comment('Год публикации');
+            $table->string('image')->comment('Изображение')->nullable();
 
             $table->unsignedBigInteger('category_id')->comment('Категория');
             $table->unsignedBigInteger('author_id')->comment('Автор');

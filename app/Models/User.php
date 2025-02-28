@@ -53,4 +53,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Book::class, 'user_books', 'user_id', 'book_id');
     }
 
+    public function is_superuser(): bool
+    {
+        return $this->is_admin === 1;
+    }
+
 }

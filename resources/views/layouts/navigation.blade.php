@@ -38,9 +38,11 @@
                             {{ __('Профиль') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('admin-panel.edit')" style="white-space: nowrap;">
-                            {{ __('Панель администратора') }}
-                        </x-dropdown-link>
+                        @if(Auth::user()->is_superuser())
+                            <x-dropdown-link :href="route('admin-panel.users')" style="white-space: nowrap;">
+                                {{ __('Панель администратора') }}
+                            </x-dropdown-link>
+                        @endif
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
