@@ -3,13 +3,17 @@
 @if ($author)
     <div class="p-4 w-full" style="border-radius: .5rem;box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5), -1px -1px 4px rgba(255, 255, 255, 0.1);">
         <div class="flex w-full">
-            <div class="flex flex-col items-center" style="width: 10rem;min-height: 11rem;overflow: hidden;">
+            <div class="flex flex-col items-center" style="width: 12rem;min-height: 12rem;overflow: hidden;">
                 <div class="w-full" style="height: 10rem;overflow: hidden;">
                     <img src="{{ url('Image/authors/'.$author->author_photo) }}" alt="">
                 </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-sm">Книг автора: </div>
+                    <div class="text-lg">{{ count($author->books) }}</div>
+                </div>
             </div>
             <div class="flex flex-col pl-4 w-full">
-                <h2 class="pb-6 text-lg font-medium text-gray-900">{{ $author->author_name }} - {{ count($author->books) }}</h2>
+                <h2 class="pb-6 text-lg font-medium text-gray-900">{{ $author->author_name }}</h2>
                 <div>{{ $author->about_author }}</div>
             </div>
             @if(!!$can_edit)
@@ -48,7 +52,7 @@
                 <!-- author_name -->
                 <div class="mt-4">
                     <x-input-label for="author_name" :value="__('Автор')" />
-                    <x-text-input id="author_name" class="block mt-1 w-full" :value="old('author_photo', $author->author_name)" minlength="3" maxlength="70" type="text" name="author_name" required autofocus autocomplete="author_name" />
+                    <x-text-input id="author_name" class="block mt-1 w-full" :value="old('author_name', $author->author_name)" minlength="3" maxlength="70" type="text" name="author_name" required autofocus autocomplete="author_name" />
                     <x-input-error :messages="$errors->get('author_name')" class="mt-2" />
                 </div>
 

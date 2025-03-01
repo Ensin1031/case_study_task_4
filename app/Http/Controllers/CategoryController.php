@@ -62,11 +62,19 @@ class CategoryController extends Controller
         $request->validate([
             'id' => ['required', 'integer'],
             'category_name' => ['required', 'string', 'min:3', 'max:30'],
+            'about_category' => ['required', 'string'],
         ]);
         $category = Category::where('id', $request->id)->get()->first();
-        if ($category) {
-            $category->category_name = $request->category_name;
-            $category->save();
+        if (!$category) {
+            $category = Category::create([
+                'category_name' => $request->category_name,
+                'about_category' => $request->about_category,
+            ]);
+        } else {
+            $category->update([
+                'category_name' => $request->category_name,
+                'about_category' => $request->about_category,
+            ]);
         }
 
         $response = redirect(route($redirect_to, $parameters, absolute: false))->with('cu_category_id', $category->id);

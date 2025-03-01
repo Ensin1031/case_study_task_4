@@ -1,114 +1,116 @@
-<section style="width: 100%;">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Создать запись книги') }}
-        </h2>
-    </header>
+<section class="w-full">
+    <details class="w-full" {{!!(session('cu_category_id') || session('cu_author_id')) ? 'open="open"' : ''}}>
+        <summary class="flex flex-row gap-2 items-center" style="cursor: pointer;">
+            <span class="flex items-center justify-center" style="width: 1.5rem;height: 1.5rem;font-size: 1.3rem;padding-bottom: .12rem;border: 1px solid #111827; border-radius: 3px;">+</span>
+            <span class="text-lg font-medium text-gray-900">
+                {{ __('Создать запись книги') }}
+            </span>
+        </summary>
+        <form method="post" action="{{ route('book.create', ['redirect_to' => 'admin-panel.books']) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+            @csrf
+            @method('post')
 
-    <form method="post" action="{{ route('book.create', ['redirect_to' => 'admin-panel.books']) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
-        @csrf
-        @method('post')
-
-        {{-- category --}}
-        <div>
-            <x-input-label for="category_id" :value="__('Категория')" />
-            <div class="flex justify-between gap-4 mt-1">
-                <select name="category_id" id="category_id" class="block w-full" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1))">
-                    <option value="">------------</option>
-                    @foreach($categories as $category)
-                        @if ($category->id == session('cu_category_id'))
-                            <option value="{{ $category->id }}" selected>{{ $category->category_name }}</option>
-                        @else
-                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                        @endif
-                    @endforeach
-                </select>
-                <x-secondary-button
-                    style="padding: 0 !important;margin: 0 !important;min-width: 42px;;font-size: 2rem;"
-                    x-data=""
-                    x-on:click.prevent="$dispatch('open-modal', 'create-category')"
-                >+</x-secondary-button>
-            </div>
-        </div>
-
-        {{-- author --}}
-        <div>
-            <x-input-label for="author_id" :value="__('Автор')" />
-            <div class="flex justify-between gap-4 mt-1">
-                <select name="author_id" id="author_id" class="block w-full" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));">
-                    <option value="">------------</option>
-                    @foreach($authors as $author)
-                        @if ($author->id == session('cu_author_id'))
-                            <option value="{{ $author->id }}" selected>{{ $author->author_name }}</option>
-                        @else
-                            <option value="{{ $author->id }}">{{ $author->author_name }}</option>
-                        @endif
-                    @endforeach
-                </select>
-                <x-secondary-button
-                        style="padding: 0 !important;margin: 0 !important;min-width: 42px;;font-size: 2rem;"
-                        x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'create-author')"
-                >+</x-secondary-button>
-            </div>
-        </div>
-
-        {{-- title --}}
-        <div>
-            <x-input-label for="title" :value="__('Наименование')" />
-            <x-text-input id="title" name="title" type="text" minlength="3" maxlength="120" class="mt-1 block w-full" :value="old('title')" required autofocus autocomplete="title" />
-            <x-input-error class="mt-2" :messages="$errors->get('title')" />
-        </div>
-
-        {{-- description --}}
-        <div>
-            <x-input-label for="description" :value="__('Краткое описание')" />
-            <textarea id="description" name="description" rows="2" cols="33" class="mt-1 block w-full" style="resize: none;border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));" required autocomplete="description"></textarea>
-            <x-input-error class="mt-2" :messages="$errors->get('description')" />
-        </div>
-
-        <div class="flex justify-between gap-4">
-            {{-- price --}}
-            <div style="width: 49%;">
-                <x-input-label for="price" :value="__('Цена')" />
-                <x-text-input id="price" name="price" type="number" step="0.01" min="0.00" class="mt-1 block w-full" :value="old('price')" required autocomplete="price" />
-                <x-input-error class="mt-2" :messages="$errors->get('price')" />
-            </div>
-
-            {{-- published_year --}}
-            <div style="width: 49%;">
-                <x-input-label for="published_year" :value="__('Год публикации')" />
-                <x-text-input id="published_year" name="published_year" type="number" min="-9999" max="9999" class="mt-1 block w-full" :value="old('published_year')" required autocomplete="published_year" />
-                <x-input-error class="mt-2" :messages="$errors->get('published_year')" />
-            </div>
-        </div>
-
-        <div class="flex justify-between gap-4">
-            {{-- status --}}
-            <div style="width: 49%;">
-                <x-input-label for="status" :value="__('Статус')" />
-                <select name="status" id="status" class="block w-full mt-1" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));">
-                    <option value="1">Черновик</option>
-                    <option value="2">Опубликовано</option>
-                    <option value="3">Удалено</option>
-                </select>
-                <x-input-error class="mt-2" :messages="$errors->get('status')" />
-            </div>
-
-            {{-- image --}}
-            <div style="width: 49%;">
-                <x-input-label for="image" :value="__('Изображение книги')" />
-                <div class="flex w-full mt-1 items-center" style="height: 2.6rem;">
-                    <x-text-input id="image" name="image" type="file" class="block w-full" :value="old('image')" required/>
+            {{-- category --}}
+            <div>
+                <x-input-label for="category_id" :value="__('Категория')" />
+                <div class="flex justify-between gap-4 mt-1">
+                    <select name="category_id" id="category_id" class="block w-full" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1))">
+                        <option value="">------------</option>
+                        @foreach($categories as $category)
+                            @if ($category->id == session('cu_category_id'))
+                                <option value="{{ $category->id }}" selected>{{ $category->category_name }}</option>
+                            @else
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <x-secondary-button
+                            style="padding: 0 !important;margin: 0 !important;min-width: 42px;;font-size: 2rem;"
+                            x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-category')"
+                    >+</x-secondary-button>
                 </div>
-                <x-input-error :messages="$errors->get('image')" class="mt-2" />
             </div>
-        </div>
 
-        <div class="flex items-center justify-end gap-4">
-            <x-primary-button>{{ __('Сохранить') }}</x-primary-button>
-        </div>
-    </form>
+            {{-- author --}}
+            <div>
+                <x-input-label for="author_id" :value="__('Автор')" />
+                <div class="flex justify-between gap-4 mt-1">
+                    <select name="author_id" id="author_id" class="block w-full" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));">
+                        <option value="">------------</option>
+                        @foreach($authors as $author)
+                            @if ($author->id == session('cu_author_id'))
+                                <option value="{{ $author->id }}" selected>{{ $author->author_name }}</option>
+                            @else
+                                <option value="{{ $author->id }}">{{ $author->author_name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <x-secondary-button
+                            style="padding: 0 !important;margin: 0 !important;min-width: 42px;;font-size: 2rem;"
+                            x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-author')"
+                    >+</x-secondary-button>
+                </div>
+            </div>
+
+            {{-- title --}}
+            <div>
+                <x-input-label for="title" :value="__('Наименование')" />
+                <x-text-input id="title" name="title" type="text" minlength="3" maxlength="120" class="mt-1 block w-full" :value="old('title')" required autofocus autocomplete="title" />
+                <x-input-error class="mt-2" :messages="$errors->get('title')" />
+            </div>
+
+            {{-- description --}}
+            <div>
+                <x-input-label for="description" :value="__('Краткое описание')" />
+                <textarea id="description" name="description" rows="2" cols="33" class="mt-1 block w-full" style="resize: none;border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));" required autocomplete="description"></textarea>
+                <x-input-error class="mt-2" :messages="$errors->get('description')" />
+            </div>
+
+            <div class="flex justify-between gap-4">
+                {{-- price --}}
+                <div style="width: 49%;">
+                    <x-input-label for="price" :value="__('Цена')" />
+                    <x-text-input id="price" name="price" type="number" step="0.01" min="0.00" class="mt-1 block w-full" :value="old('price')" required autocomplete="price" />
+                    <x-input-error class="mt-2" :messages="$errors->get('price')" />
+                </div>
+
+                {{-- published_year --}}
+                <div style="width: 49%;">
+                    <x-input-label for="published_year" :value="__('Год публикации')" />
+                    <x-text-input id="published_year" name="published_year" type="number" min="-9999" max="9999" class="mt-1 block w-full" :value="old('published_year')" required autocomplete="published_year" />
+                    <x-input-error class="mt-2" :messages="$errors->get('published_year')" />
+                </div>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                {{-- status --}}
+                <div style="width: 49%;">
+                    <x-input-label for="status" :value="__('Статус')" />
+                    <select name="status" id="status" class="block w-full mt-1" style="border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));">
+                        @foreach($statuses as $status)
+                            <option value="{{ $status['id'] }}">{{ $status['title'] }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('status')" />
+                </div>
+
+                {{-- image --}}
+                <div style="width: 49%;">
+                    <x-input-label for="image" :value="__('Изображение книги')" />
+                    <div class="flex w-full mt-1 items-center" style="height: 2.6rem;">
+                        <x-text-input id="image" name="image" type="file" class="block w-full" :value="old('image')" required/>
+                    </div>
+                    <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-4">
+                <x-primary-button>{{ __('Сохранить') }}</x-primary-button>
+            </div>
+        </form>
+    </details>
 </section>
 
 <x-modal name="create-category" focusable>

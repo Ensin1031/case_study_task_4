@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'is_active',
     ];
 
     /**
@@ -56,6 +57,11 @@ class User extends Authenticatable
     public function is_superuser(): bool
     {
         return $this->is_admin === 1;
+    }
+
+    public function is_active_user(): bool
+    {
+        return $this->is_active === 1;
     }
 
 }

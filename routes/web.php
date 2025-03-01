@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,10 +18,13 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/admin-panel/users', [AdminPanelController::class, 'work_with_users'])->name('admin-panel.users');
     Route::get('/admin-panel/books', [AdminPanelController::class, 'work_with_books'])->name('admin-panel.books');
     Route::get('/admin-panel/categories', [AdminPanelController::class, 'work_with_categories'])->name('admin-panel.categories');
     Route::get('/admin-panel/authors', [AdminPanelController::class, 'work_with_authors'])->name('admin-panel.authors');
-    Route::get('/admin-panel/users', [AdminPanelController::class, 'work_with_users'])->name('admin-panel.users');
+
+    Route::patch('/user', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 
     Route::post('/book', [BookController::class, 'store'])->name('book.create');
 
