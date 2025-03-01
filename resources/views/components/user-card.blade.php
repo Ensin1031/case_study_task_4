@@ -26,7 +26,7 @@
             <div class="flex flex-col pl-4 w-full">
                 <div class="flex flex-row items-center justify-between pb-2" style="height: 2.7rem;">
                     <h2 class="text-lg font-medium text-gray-900">
-                        <span>Имя: </span><span>{{ $user->name }}</span>
+                        <span>Имя: </span><a class="hover:underline" href="{{ route('user.show', $user->id) }}" target="_blank"><span>{{ $user->name }}</span></a>
                     </h2>
                 </div>
                 <div><span>Email: </span><span>{{ $user->email }}</span></div>

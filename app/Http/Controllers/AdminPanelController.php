@@ -3,42 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
-use App\Models\Book;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class AdminPanelController extends Controller
 {
-
-    public function work_with_books(Request $request): View
-    {
-        $books = Book::all();
-        // TODO
-        return view('admin-panel.books', [
-            'user' => $request->user(),
-            'books' => $books,
-            'statuses' => [
-                [
-                    'id' => 1,
-                    'title' => 'Черновик'
-                ],
-                [
-                    'id' => 2,
-                    'title' => 'Опубликовано'
-                ],
-                [
-                    'id' => 3,
-                    'title' => 'Удалено'
-                ],
-            ],
-            'categories' => Category::all(),
-            'authors' => Author::all(),
-        ]);
-    }
 
     public function work_with_categories(Request $request): View
     {
@@ -92,13 +63,4 @@ class AdminPanelController extends Controller
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
-    {
-        return Redirect::to('/');  // TODO
-    }
-
-    public function destroy(Request $request): RedirectResponse
-    {
-        return Redirect::to('/');  // TODO
-    }
 }
