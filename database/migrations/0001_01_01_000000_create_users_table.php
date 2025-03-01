@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_admin')->comment('Администратор')->default(false);
+            $table->boolean('is_active')->comment('Пользователь не заблокирован')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
