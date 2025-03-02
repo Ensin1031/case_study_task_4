@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if (!!$request->user() && $request->user()->is_active_user()) {
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->intended(route('profile.edit', absolute: false));
         } else {
             Auth::guard('web')->logout();
             $request->session()->invalidate();

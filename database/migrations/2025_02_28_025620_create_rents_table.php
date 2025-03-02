@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('rents', function (Blueprint $table) {
             $table->id();
             $table->integer('rent_period_days')->default(0)->comment('Дней аренды');
-            $table->enum('status', [1, 2, 3, 4])->default(1)->comment('Статус');  // 1 - Черновик, 2 - Арендовано, 3 - Просрочено, 4 - Возвращено
+            $table->date('end_date')->comment('Дата окончания аренды');
+            $table->boolean('was_closed')->default(false)->comment('Погашенная аренда');
 
             $table->unsignedBigInteger('user_id')->comment('Пользователь');
             $table->unsignedBigInteger('book_id')->comment('Книга');

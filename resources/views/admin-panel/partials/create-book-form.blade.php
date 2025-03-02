@@ -6,7 +6,7 @@
                 {{ __('Создать запись книги') }}
             </span>
         </summary>
-        <form method="post" action="{{ route('book.create', ['redirect_to' => 'admin-panel.books']) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+        <form method="post" action="{{ route('books.create', ['redirect_to' => 'admin-panel.books']) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
             @csrf
             @method('post')
 
@@ -64,7 +64,7 @@
             {{-- description --}}
             <div>
                 <x-input-label for="description" :value="__('Краткое описание')" />
-                <textarea id="description" name="description" rows="2" cols="33" class="mt-1 block w-full" style="resize: none;border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));" required autocomplete="description"></textarea>
+                <textarea id="description" name="description" rows="7" class="mt-1 block w-full" style="resize: none;border-radius: 5px;border: 1px solid rgb(209 213 219 / var(--tw-border-opacity, 1));" required autocomplete="description"></textarea>
                 <x-input-error class="mt-2" :messages="$errors->get('description')" />
             </div>
 

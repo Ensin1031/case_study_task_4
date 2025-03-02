@@ -5,18 +5,39 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('books.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
+                        {{ __('Библиотека') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('books.user-books')" :active="request()->routeIs('books.user-books')">
+                        {{ __('Мои книги') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('shop.basket')" :active="request()->routeIs('shop.basket') || request()->routeIs('shop.purchases')">
+                        {{ __('Магазин') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('rent.active')" :active="request()->routeIs('rent.active') || request()->routeIs('rent.archive')">
+                        {{ __('Аренда') }}
                     </x-nav-link>
                 </div>
             </div>
+
+            @if(Auth::user()->has_overdue_rent())
+                <div class="flex items-center cursor-default">
+                    <a href="{{ route('rent.active') }}" target="_blank"><div class="text-white" style="background-color: darkred;padding: .3rem .9rem;border-radius: 12px;font-weight: 600;">Просрочена аренда</div></a>
+                </div>
+            @endif
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -73,7 +94,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>

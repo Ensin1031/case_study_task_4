@@ -8,8 +8,8 @@
                 <div class="text-lg">{{ count($category->books) }}</div>
             </div>
             <div class="flex flex-col pl-4 w-full">
-                <h2 class="pb-6 text-lg font-medium text-gray-900">{{ $category->category_name }}</h2>
-                <div>{{ $category->about_category }}</div>
+                <a class="hover:underline" href="{{ route('category.show', $category->id) }}" target="_blank"><h2 class="pb-6 text-lg font-medium text-gray-900">{{ $category->category_name }}</h2></a>
+                <div style="display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;overflow: hidden;">{{ $category->about_category }}</div>
             </div>
             @if(!!$can_edit)
                 <div class="flex items-center whitespace-nowrap flex-col gap-2 pl-4">

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->comment('Наименование');
             $table->text('description')->comment('Краткое описание');
-            $table->enum('status', [1, 2, 3])->default(1)->comment('Статус');  // 1 - Черновик, 2 - Опубликовано, 3 - Удалено
+            $table->enum('status', [1, 2, 3])->default(1)->comment('Статус');  // 1 - Черновик, 2 - Опубликовано, 3 - Снято с публикации
             $table->float('price')->default(0.00)->comment('Цена');
             $table->integer('published_year')->default(0)->comment('Год публикации');
             $table->string('image')->comment('Изображение')->nullable();
