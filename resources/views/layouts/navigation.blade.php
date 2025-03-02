@@ -23,12 +23,12 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('shop.basket')" :active="request()->routeIs('shop.basket') || request()->routeIs('shop.purchases')">
-                        {{ __('Магазин') }}
+                        {{ __('Магазин') }} ({{ count(Auth::user()->basket_purchases) + count(Auth::user()->paid_purchases) }})
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('rent.active')" :active="request()->routeIs('rent.active') || request()->routeIs('rent.archive')">
-                        {{ __('Аренда') }}
+                        {{ __('Аренда') }} ({{ count(Auth::user()->active_rents) + count(Auth::user()->overdue_rents) }})
                     </x-nav-link>
                 </div>
             </div>
@@ -94,8 +94,17 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.index')">
+                {{ __('Библиотека') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('books.user-books')" :active="request()->routeIs('books.user-books')">
+                {{ __('Мои книги') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('shop.basket')" :active="request()->routeIs('shop.basket') || request()->routeIs('shop.purchases')">
+                {{ __('Магазин') }} ({{ count(Auth::user()->basket_purchases) }})
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('rent.active')" :active="request()->routeIs('rent.active') || request()->routeIs('rent.archive')">
+                {{ __('Аренда') }} ({{ count(Auth::user()->active_rents) }})
             </x-responsive-nav-link>
         </div>
 

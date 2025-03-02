@@ -21,6 +21,10 @@ class Book extends Model
         'author_id',
     ];
 
+    const STATUS_DRAFT = 1;
+    const STATUS_PUBLISHED = 2;
+    const STATUS_CLOSE = 3;
+
     public function sub_users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_books', 'book_id', 'user_id');
@@ -51,25 +55,45 @@ class Book extends Model
         return $this->hasMany(Shop::class, 'book_id', 'id');
     }
 
+    public function is_user_purchase(User $user): bool
+    {
+        return $this->purchases()->where('user_id', $user->id)->whereIn('status', [Shop::STATUS_BASKET])->exists();
+    }
+
+    public function is_user_rent(User $user): bool
+    {
+        return $this->rents()->where('was_closed', 0)->exists();
+    }
+
+    public function can_buy_book(): bool
+    {
+        return $this->status == Book::STATUS_PUBLISHED;
+    }
+
+    public function can_rent_book(): bool
+    {
+        return $this->status == Book::STATUS_PUBLISHED;
+    }
+
     public function next_status(): array
     {
         switch ($this->status) {
             case 3:
             case 1: {
                 return [
-                    'id' => 2,
+                    'id' => Book::STATUS_PUBLISHED,
                     'title' => 'Опубликовано',
                 ];
             }
             case 2: {
                 return [
-                    'id' => 3,
+                    'id' => Book::STATUS_CLOSE,
                     'title' => 'Снято с публикации',
                 ];
             }
             default: {
                 return [
-                    'id' => 1,
+                    'id' => Book::STATUS_DRAFT,
                     'title' => 'Черновик',
                 ];
             }

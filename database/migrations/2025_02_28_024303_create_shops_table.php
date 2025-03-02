@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
             $table->enum('status', [1, 2, 3])->default(1)->comment('Статус');  // 1 - В корзине, 2 - Оплачено, 3 - Продано
+            $table->date('paid_at')->nullable()->comment('Дата оплаты');
+            $table->date('buy_at')->nullable()->comment('Дата продажи');
 
             $table->unsignedBigInteger('user_id')->comment('Пользователь');
             $table->unsignedBigInteger('book_id')->comment('Книга');

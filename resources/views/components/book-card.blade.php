@@ -54,7 +54,7 @@
                 </div>
             @endif
             @if(!!$need_subs_manager)
-                <div class="flex items-center whitespace-nowrap flex-col gap-2 pl-4" style="min-width: 10rem;">
+                <div class="flex items-center whitespace-nowrap flex-col gap-2 pl-4" style="min-width: 13rem;">
                     @if($book->is_user_sub(Auth::user()))
                         <x-danger-button
                             class="w-full"
@@ -68,16 +68,29 @@
                             x-on:click.prevent="$dispatch('open-modal', 'sub-or-unsub-book-{{ $book->id }}')"
                         >{{ __('Подписаться') }}</x-primary-button>
                     @endif
-                    <x-secondary-button
-                        class="w-full"
-                        x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'buy-book-{{ $book->id }}')"
-                    >{{ __('Купить') }}</x-secondary-button>
-                    <x-secondary-button
-                        class="w-full"
-                        x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'rent-book-{{ $book->id }}')"
-                    >{{ __('Арендовать') }}</x-secondary-button>
+
+                    @if(!!($book->is_user_purchase(user: Auth::user()) && $book->can_buy_book()))
+                        <a href="{{ route('shop.basket') }}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                            {{ __('Продолжить покупку') }}
+                        </a>
+                    @elseif(!!$book->can_buy_book())
+                        <x-secondary-button
+                            class="w-full"
+                            x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-buy-book-{{ $book->id }}')"
+                        >{{ __('Купить') }}</x-secondary-button>
+                    @endif
+                    @if(!!$book->is_user_rent(user: Auth::user()) && $book->can_rent_book())
+                        <a href="{{ route('rent.active') }}" class="w-full inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                            {{ __('В аренде') }}
+                        </a>
+                    @elseif(!!$book->can_rent_book())
+                        <x-secondary-button
+                            class="w-full"
+                            x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'create-rent-book-{{ $book->id }}')"
+                        >{{ __('Арендовать') }}</x-secondary-button>
+                    @endif
                 </div>
             @endif
         </div>
@@ -282,6 +295,81 @@
                     </x-secondary-button>
                     <x-primary-button class="ms-3">
                         {{ !!($book->is_user_sub(Auth::user())) ? 'Отписаться' : 'Подписаться' }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </x-modal>
+
+        <x-modal name="create-buy-book-{{ $book->id }}" focusable>
+            <form method="post" action="{{ route('shop.create', ['redirect_to' => $redirect_to, 'query_parameters' => $query_parameters]) }}" class="p-6">
+                @csrf
+                @method('post')
+
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Положить книгу в корзину') }}?
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600">
+                    {{ __('Продолжить покупку можно будет во вкладке магазина') }}
+                </p>
+
+                <!-- book_id -->
+                <div style="display: none;">
+                    <x-text-input id="book_id" type="number" name="book_id" :value="$book->id" required/>
+                </div>
+
+                <!-- user_id -->
+                <div style="display: none;">
+                    <x-text-input id="user_id" type="number" name="user_id" :value="Auth::user()->id" required/>
+                </div>
+
+                <div class="flex items-center justify-end mt-4">
+                    <x-secondary-button x-on:click="$dispatch('close')">
+                        {{ __('Отмена') }}
+                    </x-secondary-button>
+                    <x-primary-button class="ms-3">
+                        {{ __('Положить в корзину') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </x-modal>
+
+        <x-modal name="create-rent-book-{{ $book->id }}" focusable>
+            <form method="post" action="{{ route('rent.create', ['redirect_to' => $redirect_to, 'query_parameters' => $query_parameters]) }}" class="p-6">
+                @csrf
+                @method('post')
+
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Арендовать книгу') }}?
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600">
+                    {{ __('Узнать данные по арендованным книгам можно во вкладке аренды') }}
+                </p>
+
+                <!-- book_id -->
+                <div style="display: none;">
+                    <x-text-input id="book_id" type="number" name="book_id" :value="$book->id" required/>
+                </div>
+
+                <!-- user_id -->
+                <div style="display: none;">
+                    <x-text-input id="user_id" type="number" name="user_id" :value="Auth::user()->id" required/>
+                </div>
+
+                {{-- rent_period_days --}}
+                <div class="w-full">
+                    <x-input-label for="rent_period_days" :value="__('Дней аренды')" />
+                    <x-text-input id="rent_period_days" name="rent_period_days" type="number" min="1" max="90" class="mt-1 block w-full" :value="old('rent_period_days')" required autocomplete="rent_period_days" />
+                    <x-input-error class="mt-2" :messages="$errors->get('rent_period_days')" />
+                </div>
+
+                <div class="flex items-center justify-end mt-4">
+                    <x-secondary-button x-on:click="$dispatch('close')">
+                        {{ __('Отмена') }}
+                    </x-secondary-button>
+                    <x-primary-button class="ms-3">
+                        {{ __('Арендовать') }}
                     </x-primary-button>
                 </div>
             </form>

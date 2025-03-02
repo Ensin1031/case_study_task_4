@@ -77,7 +77,12 @@ class User extends Authenticatable
 
     public function active_rents(): HasMany  // активные записи аренды
     {
-        return $this->rents()->where('was_closed', 0);
+        return $this->rents()->where('was_closed', 0)->where('end_at', '>=', now());
+    }
+
+    public function overdue_rents(): HasMany  // просроченные записи аренды
+    {
+        return $this->rents()->where('was_closed', 0)->where('end_at', '<', now());
     }
 
     public function archive_rents(): HasMany  // архивные записи аренды
@@ -87,7 +92,7 @@ class User extends Authenticatable
 
     public function has_overdue_rent(): bool
     {
-        return $this->active_rents()->where('end_date', '<', now())->exists();
+        return $this->overdue_rents()->exists();
     }
 
     public function purchases(): HasMany  // все покупки
@@ -95,9 +100,14 @@ class User extends Authenticatable
         return $this->hasMany(Shop::class, 'user_id', 'id');
     }
 
-    public function basket_purchases(): HasMany  // покупки в корзине (в статусах "В корзине" и "Оплачено")
+    public function basket_purchases(): HasMany  // покупки в корзине (в статусе "В корзине" - "Не оплачено")
     {
-        return $this->purchases()->whereIn('status', [Shop::STATUS_BASKET, Shop::STATUS_PAID]);
+        return $this->purchases()->where('status', Shop::STATUS_BASKET);
+    }
+
+    public function paid_purchases(): HasMany  // покупки в корзине (в статусе "Оплачено")
+    {
+        return $this->purchases()->where('status', Shop::STATUS_PAID);
     }
 
     public function purchased_books(): HasMany  // закрытые покупки (в статусе "Продано")

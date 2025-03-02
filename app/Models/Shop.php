@@ -42,4 +42,19 @@ class Shop extends Model
         return $this->belongsTo(Book::class, 'book_id', 'id');
     }
 
+    public function in_basket_status(): bool
+    {
+        return $this->status == Shop::STATUS_BASKET;
+    }
+
+    public function in_paid_status(): bool
+    {
+        return $this->status == Shop::STATUS_PAID;
+    }
+
+    public function in_buy_status(): bool
+    {
+        return $this->status == Shop::STATUS_BUY;
+    }
+
 }
