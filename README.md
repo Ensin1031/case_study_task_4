@@ -12,3 +12,6 @@
 2. скачать содержимое git-репозитория: **git clone https://github.com/Ensin1031/case_study_task_4.git**
 3. установить окружение npm install && npm run build
 4. запустить проект composer run dev
+
+Для тестирования при разворачивании проекта введен пользователь:          
+**admin - admin@admin.ru - admin**
