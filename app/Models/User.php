@@ -75,14 +75,34 @@ class User extends Authenticatable
         return $this->hasMany(Rent::class, 'user_id', 'id');
     }
 
+    public function active_rents(): HasMany  // активные записи аренды
+    {
+        return $this->rents()->where('was_closed', 0);
+    }
+
+    public function archive_rents(): HasMany  // архивные записи аренды
+    {
+        return $this->rents()->where('was_closed', 1);
+    }
+
     public function has_overdue_rent(): bool
     {
-        return $this->rents()->where('end_date', '<', now())->where('was_closed', 1)->exists();
+        return $this->active_rents()->where('end_date', '<', now())->exists();
     }
 
     public function purchases(): HasMany  // все покупки
     {
         return $this->hasMany(Shop::class, 'user_id', 'id');
+    }
+
+    public function basket_purchases(): HasMany  // покупки в корзине (в статусах "В корзине" и "Оплачено")
+    {
+        return $this->purchases()->whereIn('status', [Shop::STATUS_BASKET, Shop::STATUS_PAID]);
+    }
+
+    public function purchased_books(): HasMany  // закрытые покупки (в статусе "Продано")
+    {
+        return $this->purchases()->where('status', Shop::STATUS_BUY);
     }
 
 }
