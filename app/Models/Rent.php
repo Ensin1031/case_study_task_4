@@ -10,7 +10,7 @@ class Rent extends Model
     protected $table = 'rents';
     protected $fillable = [
         'rent_period_days',
-        'end_date',
+        'end_at',
         'was_closed',
         'user_id',
         'book_id',
@@ -38,6 +38,21 @@ class Rent extends Model
         ],
     ];
 
+    public function status(): int
+    {
+        switch (true) {
+            case $this->was_closed === 1: {
+                return Rent::STATUS_ARCHIVE;
+            }
+            case (!($this->was_closed === 1) && date_create($this->end_at) < now()): {
+                return Rent::STATUS_OVERDUE;
+            }
+            default: {
+                return Rent::STATUS_ACTIVE;
+            }
+        }
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -46,6 +61,21 @@ class Rent extends Model
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'book_id', 'id');
+    }
+
+    public function in_active_status(): bool
+    {
+        return $this->status() == Rent::STATUS_ACTIVE;
+    }
+
+    public function in_overdue_status(): bool
+    {
+        return $this->status() == Rent::STATUS_OVERDUE;
+    }
+
+    public function in_archive_status(): bool
+    {
+        return $this->status() == Rent::STATUS_ARCHIVE;
     }
 
 }

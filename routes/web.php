@@ -46,9 +46,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/shop/basket', [ShopController::class, 'basket'])->name('shop.basket');  // корзина
     Route::get('/shop/purchases', [ShopController::class, 'purchases'])->name('shop.purchases');  // покупки
+    Route::post('/shop', [ShopController::class, 'store'])->name('shop.create');
+    Route::patch('/shop', [ShopController::class, 'update'])->name('shop.update');
+    Route::delete('/shop', [ShopController::class, 'destroy'])->name('shop.destroy');
 
     Route::get('/rent/active', [RentController::class, 'active'])->name('rent.active');
     Route::get('/rent/archive', [RentController::class, 'archive'])->name('rent.archive');
+    Route::post('/rent', [RentController::class, 'store'])->name('rent.create');
+    Route::patch('/rent/extend', [RentController::class, 'extend_update'])->name('rent.extend-update');
+    Route::patch('/rent/close', [RentController::class, 'close_update'])->name('rent.close-update');
+    Route::delete('/rent', [RentController::class, 'destroy'])->name('rent.destroy');
 
 });
 
