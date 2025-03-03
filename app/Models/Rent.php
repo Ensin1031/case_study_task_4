@@ -53,6 +53,16 @@ class Rent extends Model
         }
     }
 
+    public function days_to_end(): string
+    {
+        $today_at = date_create();
+        $end_rent_at = date_create($this->end_at);
+        if ($today_at <= $end_rent_at) {
+            return $end_rent_at->diff($today_at)->days;
+        }
+        return '0';
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

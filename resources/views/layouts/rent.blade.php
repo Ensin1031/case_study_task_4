@@ -7,12 +7,12 @@
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <x-nav-link :href="route('rent.active')" :active="request()->routeIs('rent.active')">
-                    {{ __('Текущие записи') }}
+                    {{ __('Текущие записи') }} ({{ count(Auth::user()->active_rents) + count(Auth::user()->overdue_rents) }})
                 </x-nav-link>
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <x-nav-link :href="route('rent.archive')" :active="request()->routeIs('rent.archive')">
-                    {{ __('Архивные записи') }}
+                    {{ __('Архивные записи') }} ({{ count(Auth::user()->archive_rents) }})
                 </x-nav-link>
             </div>
         </div>

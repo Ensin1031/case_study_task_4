@@ -7,12 +7,12 @@
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <x-nav-link :href="route('shop.basket')" :active="request()->routeIs('shop.basket')">
-                    {{ __('Корзина') }}
+                    {{ __('Корзина') }} ({{ count(Auth::user()->basket_purchases) + count(Auth::user()->paid_purchases) }})
                 </x-nav-link>
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 <x-nav-link :href="route('shop.purchases')" :active="request()->routeIs('shop.purchases')">
-                    {{ __('История покупок') }}
+                    {{ __('История покупок') }} ({{ count(Auth::user()->purchased_books) }})
                 </x-nav-link>
             </div>
         </div>
