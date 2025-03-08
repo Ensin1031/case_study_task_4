@@ -23,7 +23,7 @@
                     Арендовано до: <h2 class="text-lg font-medium text-gray-900">{{ date_create($rent->end_at)->format('d.m.Y') }}</h2>
                 </div>
                 <div class="flex items-center pb-2 gap-2">
-                    Дней аренды: <h2 class="text-lg font-medium text-gray-900">{{ $rent->rent_period_days }}</h2>
+                    Дней до конца аренды: <h2 class="text-lg font-medium text-gray-900">{{ $rent->days_to_end() }}</h2>
                 </div>
             </div>
             @if(!!$can_edit)
