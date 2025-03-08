@@ -15,7 +15,7 @@ git clone https://github.com/Ensin1031/case_study_task_4.git
 ```
 - перейти в корневую папку проекта      
 ```php
-cd /case_study_task_5
+cd /case_study_task_4
 ```
 - развернуть проект в докере
 ```php
